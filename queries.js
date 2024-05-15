@@ -30,7 +30,6 @@ const getData = async (tableName, limits = 10, order_by = 'id_ASC', page = 1) =>
     const query = `SELECT (SELECT COUNT(*) FROM ${tableName} AS total_rows), (SELECT SUM(stock) FROM ${tableName} AS total_stock), ${tableName}.* FROM ${tableName} ORDER BY ${field} ${dir} LIMIT ${limits} OFFSET ${offset}`
 
     let { rows } = await pool.query(query);
-    console.log(rows);
     const totalRows = parseInt(rows[0].count);
     const totalStock = parseInt(rows[0].sum);
     rows = rows.map((entry) => {
@@ -64,7 +63,8 @@ const getDataByFilters = async (tableName, params) => {
         query += ` WHERE ${filters}`;
     }
 
-    return { rows } = await pool.query(query, values);
+    const { rows } = await pool.query(query, values);
+    return rows;
 };
 
 const getJewels = async ({ limits, order_by, page }) => {
@@ -77,11 +77,12 @@ const getJewelsByFilter = async (params) => {
 
 const getDataByID = async (tableName, id) => {
     const query = `SELECT * FROM ${tableName} WHERE id = ${id}`
-    return { rows } = await pool.query(query);
+    const { rows } = await pool.query(query);
+    return rows;
 }
 
-const getJewel = (id) => {
-    return getDataByID('inventory', id);
+const getJewel = async (id) => {
+    return await getDataByID('inventory', id);
 }
 
 module.exports = { getJewel, getJewels, getJewelsByFilter };
