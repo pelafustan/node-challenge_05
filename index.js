@@ -3,7 +3,7 @@ const PORT = process.env.API_PORT;
 
 const express = require('express');
 const cors = require('cors');
-const { getJewels } = require('./queries');
+const { getJewels, getJewelsByFilter } = require('./queries');
 
 const app = express();
 app.use(express.json());
@@ -47,6 +47,16 @@ app.get('/jewels', async (req, res) => {
     } catch (err) {
         console.log(err);
         res.send(400).send({ 'error': err });
+    }
+});
+
+app.get('/jewels/filters', async (req, res) => {
+    try {
+        const data = await getJewelsByFilter(req.query);
+        res.status(200).send(JSON.stringify(data));
+    } catch (err) {
+        console.log(err);
+        res.status(400).send({ error: err })
     }
 });
 

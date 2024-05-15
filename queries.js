@@ -41,20 +41,20 @@ const getData = async (tableName, limits = 10, order_by = 'id_ASC', page = 1) =>
 };
 
 const getDataByFilters = async (tableName, params) => {
-    const filters = [];
-    const values = [];
+    let filters = [];
+    let values = [];
 
     const addFilter = (field, opr, value) => {
         values.push(value);
-        filters.push(`${field} ${opr} $${++values.length}`);
+        filters.push(`${field} ${opr} $${values.length}`);
     };
 
     if (params) {
         const { price_min, price_max, category, material } = params;
         if (price_min) addFilter('price', '>=', price_min);
         if (price_max) addFilter('price', '<=', price_max);
-        if (category) addFilter('category', '==', category);
-        if (material) addFilter('material', '==', material);
+        if (category) addFilter('category', '=', category);
+        if (material) addFilter('material', '=', material);
     }
 
     let query = `SELECT * FROM ${tableName}`;
@@ -64,22 +64,20 @@ const getDataByFilters = async (tableName, params) => {
         query += ` WHERE ${filters}`;
     }
 
-    const { rows: data, rowCount: count } = await pool.query(query, values);
-    return [data, count];
+    return { rows } = await pool.query(query, values);
 };
 
-const getJewels = ({ limits, order_by, page }) => {
-    return getData('inventory', limits, order_by, page);
+const getJewels = async ({ limits, order_by, page }) => {
+    return await getData('inventory', limits, order_by, page);
 };
 
-const getJewelsByFilter = (params) => {
-    return getDataByFilters('inventory', params);
+const getJewelsByFilter = async (params) => {
+    return await getDataByFilters('inventory', params);
 };
 
 const getDataByID = async (tableName, id) => {
     const query = `SELECT * FROM ${tableName} WHERE id = ${id}`
-    const { rows } = await pool.query(query);
-    return rows;
+    return { rows } = await pool.query(query);
 }
 
 const getJewel = (id) => {
