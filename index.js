@@ -71,4 +71,8 @@ app.get('/jewels/jewel/:id', async (req, res) => {
     }
 });
 
+app.get('*', (_, res) => {
+    res.status(404).send({ error: 'Invalid path' });
+});
+
 app.listen(PORT, () => console.log(new Date().toString(), 'Server Running!'));
