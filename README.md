@@ -42,6 +42,31 @@ You have the following endpoints:
 
 There is also a middle that log all the calls made to the API. The logs will be stored in the same directory where `index.js` lives, inside a file called `logs.json`.
 
+### About the DB
+
+This app expects a database called `jewels`, and the following table:
+```sql
+CREATE TABLE inventory (
+    id INT GENERATED ALWAYS AS IDENTITY, 
+    name VARCHAR(50) NOT NULL, 
+    category VARCHAR(50) NOT NULL, 
+    material VARCHAR(50) NOT NULL,
+    price INT NOT NULL CHECK (price > 0),
+    stock INT NOT NULL CHECK (stock >= 0)
+);
+```
+
+You can populate this table with the following values:
+```sql
+INSERT INTO inventory (name, category, material, price, stock) VALUES
+    ('Heart Necklace', 'necklace', 'gold', 20000, 2),
+    ('History Necklace', 'necklace', 'silver', 15000, 5),
+    ('Berry Earrings', 'earrings', 'gold', 12000, 10),
+    ('Hook Blue Earrings', 'earrings', 'gold', 25000, 4),
+    ('Wish Ring', 'ring', 'silver', 30000, 4),
+    ('Greece Rock Crystal Ring', 'ring', 'gold', 40000, 2);
+```
+
 ---
 
 ### Author
