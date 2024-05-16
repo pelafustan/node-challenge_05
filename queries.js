@@ -49,11 +49,12 @@ const getDataByFilters = async (tableName, params) => {
     };
 
     if (params) {
-        const { price_min, price_max, category, material } = params;
+        const { price_min, price_max, category, material, stock_min } = params;
         if (price_min) addFilter('price', '>=', price_min);
         if (price_max) addFilter('price', '<=', price_max);
         if (category) addFilter('category', '=', category);
         if (material) addFilter('material', '=', material);
+        if (stock_min) addFilter('stock', '>=', stock_min);
     }
 
     let query = `SELECT * FROM ${tableName}`;
