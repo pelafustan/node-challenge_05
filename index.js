@@ -4,10 +4,13 @@ const PORT = process.env.API_PORT;
 const express = require('express');
 const cors = require('cors');
 const { getJewel, getJewels, getJewelsByFilter } = require('./queries');
+const { logs } = require('./middlewares');
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+app.use(logs);
 
 app.get('/jewels', async (req, res) => {
     try {
